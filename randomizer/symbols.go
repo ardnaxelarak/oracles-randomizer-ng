@@ -1,12 +1,12 @@
 package randomizer
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"bufio"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 // Reads a ".sym" file, returns a tuple with 2 elements:

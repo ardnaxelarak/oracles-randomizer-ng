@@ -67,18 +67,19 @@ func addNodeParents(prenodes map[string]*prenode, g graph) {
 }
 
 type routeInfo struct {
-	graph        graph
-	slots        map[string]*node
-	seed         uint32
-	seasons      map[string]byte
-	entrances    map[string]string
-	portals      map[string]string
-	companion    int // 1 to 3
-	usedItems    *list.List
-	usedSlots    *list.List
-	ringMap      map[string]string
-	attemptCount int
-	src          *rand.Rand
+	graph         graph
+	slots         map[string]*node
+	seed          uint32
+	seasons       map[string]byte
+	entrances     map[string]string
+	portals       map[string]string
+	companion     int // 1 to 3
+	usedItems     *list.List
+	usedSlots     *list.List
+	startingItems *list.List
+	ringMap       map[string]string
+	attemptCount  int
+	src           *rand.Rand
 }
 
 const (
@@ -96,6 +97,18 @@ func newRouteGraph(rom *romState) graph {
 	return g
 }
 
+func getStartingItems(rom *romState, itemlist string) *list.List {
+	result := list.New()
+	for _, s := range strings.Split(itemlist, ",") {
+		_, ok := rom.treasures[s]
+		if !ok {
+			panic("no such item: " + s)
+		}
+		result.PushBack(s)
+	}
+	return result
+}
+
 // attempts to create a path to the given targets by placing different items in
 // slots.
 func findRoute(rom *romState, seed uint32, src *rand.Rand,
@@ -106,10 +119,11 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 	// also keep track of which items we've popped off the stacks.
 	// these lists are parallel; i.e. the first item is in the first slot
 	ri := &routeInfo{
-		seed:      seed,
-		usedItems: list.New(),
-		usedSlots: list.New(),
-		src:       src,
+		seed:          seed,
+		usedItems:     list.New(),
+		usedSlots:     list.New(),
+		startingItems: getStartingItems(rom, ropts.starting),
+		src:           src,
 	}
 
 	// try to find the route, retrying if needed
@@ -127,6 +141,12 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 		ri.companion = rollAnimalCompanion(ri.src, ri.graph, rom.game)
 		ri.ringMap, _ = rom.randomizeRingPool(ri.src, nil)
 		itemList, slotList = initRouteInfo(ri, rom)
+
+		// attach starting items to the "start" node
+		for ei := ri.startingItems.Front(); ei != nil; ei = ei.Next() {
+			item := ei.Value.(string)
+			ri.graph[item].addParent(ri.graph["start"])
+		}
 
 		// attach free items to the "start" node until placed.
 		for ei := itemList.Front(); ei != nil; ei = ei.Next() {
@@ -173,7 +193,7 @@ var (
 		"holodrum plain", "sunken city", "lost woods", "tarm ruins",
 		"western coast", "temple remains",
 	}
-	seasonAreaRoomPacks = map[string]int {
+	seasonAreaRoomPacks = map[string]int{
 		"north horon":     0x10,
 		"eastern suburbs": 0x11,
 		"woods of winter": 0x12,
@@ -205,36 +225,36 @@ func setDungeonEntrances(
 	src *rand.Rand, g graph, game int, shuffle bool) map[string]string {
 	var dungeonConnections = map[int][][]string{
 		gameSeasons: [][]string{
-			{"d1","d1"},
-			{"d2","d2"},
-			{"d3","d3"},
-			{"d4","d4"},
-			{"d5","d5"},
-			{"d6","d6"},
-			{"d7","d7"},
-			{"d8","d8"},
+			{"d1", "d1"},
+			{"d2", "d2"},
+			{"d3", "d3"},
+			{"d4", "d4"},
+			{"d5", "d5"},
+			{"d6", "d6"},
+			{"d7", "d7"},
+			{"d8", "d8"},
 		},
 		gameAges: [][]string{
-			{"d1","d1"},
-			{"d2 present","d2"}, // 2 entrances but only 1 destination
-			{"d2 past",   "d2"},
-			{"d3","d3"},
-			{"d4","d4"},
-			{"d5","d5"},
-			{"d6 present","d6 present"},
-			{"d6 past",   "d6 past"},
-			{"d7","d7"},
-			{"d8","d8"},
+			{"d1", "d1"},
+			{"d2 present", "d2"}, // 2 entrances but only 1 destination
+			{"d2 past", "d2"},
+			{"d3", "d3"},
+			{"d4", "d4"},
+			{"d5", "d5"},
+			{"d6 present", "d6 present"},
+			{"d6 past", "d6 past"},
+			{"d7", "d7"},
+			{"d8", "d8"},
 		},
 	}
 
 	dungeonEntranceMap := make(map[string]string)
 
-	entrances    := make([]string, len(dungeonConnections[game]))
+	entrances := make([]string, len(dungeonConnections[game]))
 	destinations := make([]string, len(dungeonConnections[game]))
 
 	for i := 0; i < len(entrances); i++ {
-		entrances[i]    = dungeonConnections[game][i][0]
+		entrances[i] = dungeonConnections[game][i][0]
 		destinations[i] = dungeonConnections[game][i][1]
 	}
 
@@ -255,7 +275,7 @@ func setDungeonEntrances(
 
 	for i := 0; i < len(entrances); i++ {
 		enterName := fmt.Sprintf("%s entrance", entrances[i])
-		destName  := fmt.Sprintf("enter %s", destinations[i])
+		destName := fmt.Sprintf("enter %s", destinations[i])
 		dungeonEntranceMap[entrances[i]] = destinations[i]
 		g[destName].addParent(g[enterName])
 	}
@@ -393,9 +413,21 @@ func initRouteInfo(
 	}
 
 	// sort the slices so that order isn't dependent on map implementation,
-	// then shuffle the sorted slices
 	sort.Strings(itemNames)
 	sort.Strings(slotNames)
+
+	// replace starting items with gasha seeds
+	for ei := ri.startingItems.Front(); ei != nil; ei = ei.Next() {
+		item := ei.Value.(string)
+		for i, key := range itemNames {
+			if key == item {
+				itemNames[i] = "gasha seed"
+				break
+			}
+		}
+	}
+
+	// then shuffle the sorted slices
 	ri.src.Shuffle(len(itemNames), func(i, j int) {
 		itemNames[i], itemNames[j] = itemNames[j], itemNames[i]
 	})
@@ -541,7 +573,7 @@ func itemFitsInSlot(itemNode, slotNode *node, ropts *randomizerOptions) bool {
 		// HasPrefix is specifically for ages d6 boss key.
 		dungeonName := getDungeonName(itemNode.name)
 		if dungeonName != "" &&
-		!strings.HasPrefix(getDungeonName(slotNode.name), dungeonName) {
+			!strings.HasPrefix(getDungeonName(slotNode.name), dungeonName) {
 			return false
 		}
 	}

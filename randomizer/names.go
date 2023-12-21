@@ -21,19 +21,19 @@ var commonNiceNames = map[string]string{
 	"feather":       "roc's feather/cape",
 
 	// items from ages (or upgrades from ages)
-	"cane":         "cane of somaria",
-	"switch hook":  "switch/long hook",
-	"bracelet":     "power bracelet/glove",
-	"flippers":     "zora's flippers / mermaid suit",
+	"cane":        "cane of somaria",
+	"switch hook": "switch/long hook",
+	"bracelet":    "power bracelet/glove",
+	"flippers":    "zora's flippers / mermaid suit",
 }
 
 var seasonsNiceNames = map[string]string{
 	// items
-	"spring":        "rod of spring",
-	"summer":        "rod of summer",
-	"autumn":        "rod of autumn",
-	"winter":        "rod of winter",
-	"star ore":      "star-shaped ore",
+	"spring":   "rod of spring",
+	"summer":   "rod of summer",
+	"autumn":   "rod of autumn",
+	"winter":   "rod of winter",
+	"star ore": "star-shaped ore",
 
 	// checks
 	"d0 key chest":   "hero's cave key chest",

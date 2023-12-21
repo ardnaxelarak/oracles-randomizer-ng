@@ -168,6 +168,12 @@ func writeSummary(path string, checksum []byte, ropts randomizerOptions,
 	summary <- fmt.Sprintf("difficulty: %s",
 		ternary(ropts.hard, "hard", "normal"))
 
+	// starting items
+	sendSectionHeader(summary, "starting items")
+	for _, s := range strings.Split(ropts.starting, ",") {
+		summary <- getNiceName(s, rom.game)
+	}
+
 	// items
 	progChecks := make(map[*node]*node)
 	for slot, item := range checks {

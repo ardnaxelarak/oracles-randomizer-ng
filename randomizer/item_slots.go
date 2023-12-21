@@ -8,16 +8,16 @@ import (
 
 // an item slot (chest, gift, etc). it references room data and treasure data.
 type itemSlot struct {
-	treasure              *treasure
+	treasure *treasure
 
-	hasAddr               bool
-	addr                  *address // address of item slot data (only if hasAddr is true)
-	label                 string   // label referencing item slot
+	hasAddr bool
+	addr    *address // address of item slot data (only if hasAddr is true)
+	label   string   // label referencing item slot
 
-	group, room, player   byte
-	moreRooms             []uint16 // high = group, low = room
-	mapTile               uint16   // overworld map coords (includes group)
-	localOnly             bool     // multiworld
+	group, room, player byte
+	moreRooms           []uint16 // high = group, low = room
+	mapTile             uint16   // overworld map coords (includes group)
+	localOnly           bool     // multiworld
 }
 
 // implementes `mutate` from the `mutable` interface.
@@ -43,20 +43,20 @@ func (mut *itemSlot) check(b []byte) error {
 	return nil
 
 	/*
-	// skip zero addresses
-	if len(mut.idAddrs) == 0 || mut.idAddrs[0].offset == 0 {
-		return nil
-	}
-
-	// only check ID addresses, since situational variants and progressive
-	// items mess with everything else.
-	for _, addr := range mut.idAddrs {
-		if err := checkByte(b, addr, mut.treasure.id); err != nil {
-			return err
+		// skip zero addresses
+		if len(mut.idAddrs) == 0 || mut.idAddrs[0].offset == 0 {
+			return nil
 		}
-	}
 
-	return nil
+		// only check ID addresses, since situational variants and progressive
+		// items mess with everything else.
+		for _, addr := range mut.idAddrs {
+			if err := checkByte(b, addr, mut.treasure.id); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	*/
 }
 
@@ -80,7 +80,7 @@ type rawSlot struct {
 	Local bool // dummy implies true
 }
 
-var seasonsDungeonMapTiles = map[string]uint16 {
+var seasonsDungeonMapTiles = map[string]uint16{
 	"d0": 0x0d4,
 	"d1": 0x096,
 	"d2": 0x08d,
@@ -95,22 +95,21 @@ var seasonsDungeonMapTiles = map[string]uint16 {
 // NOTE: Past & present entrances for d2 will work weird with this. But map
 // tiles are not currently needed in ages anyway (only for the seasons treasure
 // map).
-var agesDungeonMapTiles = map[string]uint16 {
-	"d1": 0x08d,
-	"d2": 0x183,
-	"d3": 0x0ba,
-	"d4": 0x003,
-	"d5": 0x00a,
+var agesDungeonMapTiles = map[string]uint16{
+	"d1":         0x08d,
+	"d2":         0x183,
+	"d3":         0x0ba,
+	"d4":         0x003,
+	"d5":         0x00a,
 	"d6 past":    0x13c,
 	"d6 present": 0x03c,
-	"d7": 0x090,
-	"d8": 0x15c,
+	"d7":         0x090,
+	"d8":         0x15c,
 }
-
 
 // return a map of slot names to slot data. if romState.data is nil, only
 // "static" data is loaded.
-func (rom *romState) loadSlots(crossitems bool) map[string]*itemSlot {
+func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlot {
 	raws := make(map[string]*rawSlot)
 
 	filename := fmt.Sprintf("/romdata/%s_slots.yaml", gameNames[rom.game])
@@ -166,7 +165,7 @@ func (rom *romState) loadSlots(crossitems bool) map[string]*itemSlot {
 	if crossitems {
 		itemsToInsert := []string(nil)
 		if rom.game == gameSeasons {
-			itemsToInsert = []string {
+			itemsToInsert = []string{
 				"switch hook",
 				"switch hook",
 				"cane",
@@ -175,7 +174,7 @@ func (rom *romState) loadSlots(crossitems bool) map[string]*itemSlot {
 				"bracelet",
 			}
 		} else {
-			itemsToInsert = []string {
+			itemsToInsert = []string{
 				"feather",
 				"rod",
 				"slingshot",
@@ -184,6 +183,30 @@ func (rom *romState) loadSlots(crossitems bool) map[string]*itemSlot {
 				"boomerang",
 				"fool's ore",
 			}
+		}
+
+		for _, item := range itemsToInsert {
+			inserted := false
+			for _, slot := range m {
+				if slot.treasure.displayName == "gasha seed" {
+					slot.treasure = rom.treasures[item]
+					inserted = true
+					break
+				}
+			}
+			if !inserted {
+				panic(fmt.Sprintf("couldn't insert item %s into item slots", item))
+			}
+		}
+	}
+
+	if linkeditems {
+		itemsToInsert := []string{
+			"sword",
+			"biggoron's sword",
+			"satchel",
+			"bombchu, 10",
+			"iron shield",
 		}
 
 		for _, item := range itemsToInsert {

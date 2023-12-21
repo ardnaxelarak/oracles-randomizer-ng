@@ -65,6 +65,7 @@ var (
 	flagHard        bool
 	flagKeysanity   bool
 	flagCrossitems  bool
+	flagLinkeditems bool
 	flagNoUI        bool
 	flagPlan        string
 	flagMulti       string
@@ -73,6 +74,7 @@ var (
 	flagRace        bool
 	flagAutoMermaid bool
 	flagVerbose     bool
+	flagStarting    string
 )
 
 type randomizerOptions struct {
@@ -82,11 +84,13 @@ type randomizerOptions struct {
 	portals     bool
 	keysanity   bool
 	crossitems  bool
+	linkeditems bool
 	plan        *plan
 	race        bool
 	seed        string
 	game        int
 	players     int
+	starting    string
 }
 
 // initFlags initializes the CLI/TUI option values and variables.
@@ -104,6 +108,8 @@ func initFlags() {
 		"shuffle dungeon keys, maps, compasses, and slates outside their dungeons")
 	flag.BoolVar(&flagCrossitems, "crossitems", false,
 		"add Ages items to Seasons, and vice-versa")
+	flag.BoolVar(&flagLinkeditems, "linkeditems", false,
+		"add items obtainable from a linked game to the pool")
 	flag.BoolVar(&flagNoUI, "noui", false,
 		"use command line without prompts if input file is given")
 	flag.StringVar(&flagPlan, "plan", "",
@@ -116,8 +122,10 @@ func initFlags() {
 		"don't print full seed in file select screen or filename")
 	flag.StringVar(&flagSeed, "seed", "",
 		"specific random seed to use (32-bit hex number)")
+	flag.StringVar(&flagStarting, "starting", "",
+		"comma-separated list of starting items")
 	flag.BoolVar(&flagAutoMermaid, "automermaid", false,
-		"warp to ember tree by pressing start+B on map screen")
+		"hold direction to swim instead of tapping with mermaid suit")
 	flag.BoolVar(&flagVerbose, "verbose", false,
 		"print more detailed output to terminal")
 	flag.Parse()
@@ -180,8 +188,8 @@ func Main() {
 	if flagMulti != "" {
 		for i, s := range strings.Split(flagMulti, ",") {
 			optsList = append(optsList, &randomizerOptions{
-				race:    flagRace,
-				seed:    flagSeed,
+				race: flagRace,
+				seed: flagSeed,
 			})
 			if err := roptsFromString(s, optsList[i]); err != nil {
 				fatal(err, printErrf)
@@ -198,6 +206,8 @@ func Main() {
 			portals:     flagPortals,
 			keysanity:   flagKeysanity,
 			crossitems:  flagCrossitems,
+			linkeditems: flagLinkeditems,
+			starting:    flagStarting,
 		})
 	}
 	for _, ropts := range optsList {
@@ -229,7 +239,7 @@ func Main() {
 		// i forget why or whether this is useful.
 		var rom *romState
 		if flag.Arg(1) == "" {
-			rom = newRomState(nil, nil, nil, game, 1, false)
+			rom = newRomState(nil, nil, nil, game, 1, false, false)
 		} else {
 			f, err := os.Open(flag.Arg(1))
 			if err != nil {
@@ -242,7 +252,7 @@ func Main() {
 				fatal(err, printErrf)
 				return
 			}
-			rom = newRomState(b, nil, nil, game, 1, false)
+			rom = newRomState(b, nil, nil, game, 1, false, false)
 		}
 
 		fmt.Println(rom.findAddr(byte(bank), uint16(addr)))
@@ -329,7 +339,7 @@ func runRandomizer(ui *uiInstance, optsList []*randomizerOptions, logf logFunc) 
 				fatal(err, logf)
 				return
 			} else {
-				roms[i] = newRomState(b, labels, defs, game, i+1, ropts.crossitems)
+				roms[i] = newRomState(b, labels, defs, game, i+1, ropts.crossitems, ropts.linkeditems)
 			}
 
 			// sanity check beforehand

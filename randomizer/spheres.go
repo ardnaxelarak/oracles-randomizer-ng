@@ -26,7 +26,7 @@ func getChecks(usedItems, usedSlots *list.List) map[*node]*node {
 // also returns a separate slice of checks that aren't reachable at all.
 // returned slices are ordered alphabetically.
 func getSpheres(g graph, checks map[*node]*node, keysAreProgression bool,
-resetFunc func()) ([][]*node, []*node) {
+	resetFunc func()) ([][]*node, []*node) {
 	reached := make(map[*node]bool)
 	spheres := make([][]*node, 0)
 
@@ -151,7 +151,7 @@ func logSpheres(summary chan string, checks map[*node]*node,
 // collates all the checks from multiple routes and returns check/sphere data.
 // also returns a "master graph" which contains all the route graphs.
 func getAllSpheres(routes []*routeInfo,
-keysAreProgression bool) (graph, map[*node]*node, [][]*node, []*node) {
+	keysAreProgression bool) (graph, map[*node]*node, [][]*node, []*node) {
 	checks, spheres := make(map[*node]*node), make([][]*node, 0)
 	for _, ri := range routes {
 		for k, v := range getChecks(ri.usedItems, ri.usedSlots) {

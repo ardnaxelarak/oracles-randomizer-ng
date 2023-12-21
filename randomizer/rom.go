@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"regexp"
 	"sort"
-	"strings"
 	"strconv"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -84,7 +84,7 @@ type romState struct {
 	definitions  map[string]uint32
 }
 
-func newRomState(data []byte, labels map[string]*address, definitions map[string]uint32, game, player int, crossitems bool) *romState {
+func newRomState(data []byte, labels map[string]*address, definitions map[string]uint32, game, player int, crossitems, linkeditems bool) *romState {
 	rom := &romState{
 		game:        game,
 		player:      player,
@@ -93,7 +93,7 @@ func newRomState(data []byte, labels map[string]*address, definitions map[string
 		definitions: definitions,
 		treasures:   loadTreasures(data, labels["treasureObjectData"], game),
 	}
-	rom.itemSlots = rom.loadSlots(crossitems)
+	rom.itemSlots = rom.loadSlots(crossitems, linkeditems)
 	rom.initializeMutables(game)
 	return rom
 }
@@ -111,6 +111,7 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 		rom.setTreasureMapData()
 	}
 
+	rom.writeStartingItems(ropts)
 	rom.setSeedData()
 	rom.setFileSelectText(optString(seed, ropts, "+"))
 	rom.attachText()
@@ -176,35 +177,35 @@ func (rom *romState) setSeedData() {
 
 	if rom.game == gameSeasons {
 		for i, treeData := range [][]string{
-			{"horon village tree",  "5"},
-			{"woods of winter tree","4"},
-			{"north horon tree",    "2"},
-			{"spool swamp tree",    "3"},
-			{"sunken city tree",    "1"},
-			{"tarm ruins tree",     "0"},
+			{"horon village tree", "5"},
+			{"woods of winter tree", "4"},
+			{"north horon tree", "2"},
+			{"spool swamp tree", "3"},
+			{"sunken city tree", "1"},
+			{"tarm ruins tree", "0"},
 		} {
 			// Set seed type
 			id := rom.itemSlots[treeData[0]].treasure.id
 			addr := rom.lookupLabel("enemyCode5a@treeDataTable")
-			rom.data[addr.fullOffset() + i * 3] = id
+			rom.data[addr.fullOffset()+i*3] = id
 
 			// Set map popup (order is different)
 			popupIndex, _ := strconv.ParseInt(treeData[1], 10, 64)
 			addr = rom.lookupLabel("treeWarps")
-			rom.data[addr.fullOffset() + int(popupIndex) * 3 + 2] = 0x15 + id
+			rom.data[addr.fullOffset()+int(popupIndex)*3+2] = 0x15 + id
 		}
 	} else {
 		for _, treeData := range [][]string{
-			{"crescent island tree",    "0ac", "present", "0"},
-			{"symmetry city tree",      "013", "present", "1"},
-			{"south lynna tree",        "078", "present", "2"},
-			{"zora village tree",       "0c1", "present", "3"},
-			{"rolling ridge west tree", "108", "past",    "0"},
-			{"ambi's palace tree",      "125", "past",    "1"},
-			{"rolling ridge east tree", "12d", "past",    "2"},
-			{"south lynna tree",        "178", "past",    "3"},
-			{"deku forest tree",        "180", "past",    "4"},
-			{"zora village tree",       "1c1", "past",    "5"},
+			{"crescent island tree", "0ac", "present", "0"},
+			{"symmetry city tree", "013", "present", "1"},
+			{"south lynna tree", "078", "present", "2"},
+			{"zora village tree", "0c1", "present", "3"},
+			{"rolling ridge west tree", "108", "past", "0"},
+			{"ambi's palace tree", "125", "past", "1"},
+			{"rolling ridge east tree", "12d", "past", "2"},
+			{"south lynna tree", "178", "past", "3"},
+			{"deku forest tree", "180", "past", "4"},
+			{"zora village tree", "1c1", "past", "5"},
 		} {
 			// Set seed type
 			id := rom.itemSlots[treeData[0]].treasure.id
@@ -218,11 +219,11 @@ func (rom *romState) setSeedData() {
 				// to write code to parse object data properly; so this is
 				// simply looking for byte 0xf7 (obj_SpecificEnemyA)
 				// corresponding to the seed object. I mean, hey, it works.
-				if rom.data[addr] == 0xf7 && rom.data[addr + 2] == 0x5a {
-					subid := rom.data[addr + 3]
+				if rom.data[addr] == 0xf7 && rom.data[addr+2] == 0x5a {
+					subid := rom.data[addr+3]
 					subid &= 0x0f // lower nybble is something else, must preserve
 					subid |= id << 4
-					rom.data[addr + 3] = subid
+					rom.data[addr+3] = subid
 					break
 				} else {
 					addr += 1
@@ -233,7 +234,7 @@ func (rom *romState) setSeedData() {
 			// Set map popup
 			addr = rom.lookupLabel(treeData[2] + "TreeWarps").fullOffset()
 			popupIndex, _ := strconv.ParseInt(treeData[3], 10, 64)
-			rom.data[addr + int(popupIndex) * 3 + 2] = 0x15 + id
+			rom.data[addr+int(popupIndex)*3+2] = 0x15 + id
 		}
 	}
 }
@@ -241,7 +242,7 @@ func (rom *romState) setSeedData() {
 // set the locations of the sparkles for the jewels on the treasure map.
 func (rom *romState) setTreasureMapData() {
 	for i, name := range []string{"round", "pyramid", "square", "x-shaped"} {
-		addr := rom.lookupLabel("mapMenu_drawJewelLocations@jewelLocations").fullOffset() + i * 2
+		addr := rom.lookupLabel("mapMenu_drawJewelLocations@jewelLocations").fullOffset() + i*2
 		rom.data[addr+0] = 0x00
 		rom.data[addr+1] = 0x63 // default to tarm gate
 		for _, slot := range rom.lookupAllItemSlots(name + " jewel") {
@@ -364,9 +365,9 @@ func (rom *romState) randomizeRingPool(src *rand.Rand,
 
 type warpData struct {
 	// loaded from yaml
-	Label     string
-	Index     byte
-	MapTile   uint16
+	Label   string
+	Index   byte
+	MapTile uint16
 
 	// set after loading
 	vanillaMapTile uint16
@@ -377,7 +378,7 @@ type warpData struct {
 
 func (rom *romState) setWarps(warpMap map[string]string, dungeons bool) {
 	lookupWarpSource := func(label string, index byte) int {
-		return rom.lookupLabel(label).fullOffset() + int(index) * 4
+		return rom.lookupLabel(label).fullOffset() + int(index)*4
 	}
 
 	// load yaml data
@@ -431,15 +432,15 @@ func (rom *romState) setWarps(warpMap map[string]string, dungeons bool) {
 	exitCount := make(map[string]int)
 	addedExtraExit := false
 	for srcName, destName := range warpMap {
-		enterWarp           := warps[srcName  + " entrance"]
-		exitWarp            := warps[destName + " exit"]
-		origEssenceWarp     := warps[srcName  + " essence"]
-		changingEssenceWarp := warps[destName + " essence"]
+		enterWarp := warps[srcName+" entrance"]
+		exitWarp := warps[destName+" exit"]
+		origEssenceWarp := warps[srcName+" essence"]
+		changingEssenceWarp := warps[destName+" essence"]
 
-		origEnter, origExit := destName + " entrance", srcName + " exit"
+		origEnter, origExit := destName+" entrance", srcName+" exit"
 
-		var entranceWarpData* []byte
-		var exitWarpData*     []byte
+		var entranceWarpData *[]byte
+		var exitWarpData *[]byte
 
 		// Ages D2 has multiple entrances but only 1 exit. Must do some
 		// shenanigans to make it work properly.
@@ -457,21 +458,21 @@ func (rom *romState) setWarps(warpMap map[string]string, dungeons bool) {
 			} else if origExit == "d2 present exit" {
 				// 0x4d = Dest warp index added in disassembly for d2 present
 				// exit warp. 0x03 = group (0) + transition type (3).
-				exitWarpData = &[]byte { 0x4d, 0x03 }
+				exitWarpData = &[]byte{0x4d, 0x03}
 			}
 		}
 
 		if entranceWarpData == nil {
-			entranceWarpData = &[]byte { 0, 0 }
+			entranceWarpData = &[]byte{0, 0}
 			copy(*entranceWarpData, warps[origEnter].vanillaData)
 		}
 		if exitWarpData == nil {
-			exitWarpData = &[]byte { 0, 0 }
+			exitWarpData = &[]byte{0, 0}
 			copy(*exitWarpData, warps[origExit].vanillaData)
 		}
 
 		exitCount[destName] += 1
-		numExits, _ := exitCount[destName];
+		numExits, _ := exitCount[destName]
 		if rom.game == gameAges && numExits > 1 {
 			if addedExtraExit {
 				fatalErr("More than 1 extra dungeon exit created")
@@ -480,10 +481,10 @@ func (rom *romState) setWarps(warpMap map[string]string, dungeons bool) {
 			// warp data to tell the disassembly's special-case code where to
 			// send Link when it detects that he's exiting from this entrance.
 			duplicateExitOffset := rom.lookupLabel("randoAltDungeonEntranceRoom").fullOffset()
-			rom.data[duplicateExitOffset + 0] = origEssenceWarp.vanillaData[0]
-			rom.data[duplicateExitOffset + 1] = origEssenceWarp.vanillaData[1]
-			rom.data[duplicateExitOffset + 2] = origEssenceWarp.vanillaData[2]
-			rom.data[duplicateExitOffset + 3] = origEssenceWarp.vanillaData[3]
+			rom.data[duplicateExitOffset+0] = origEssenceWarp.vanillaData[0]
+			rom.data[duplicateExitOffset+1] = origEssenceWarp.vanillaData[1]
+			rom.data[duplicateExitOffset+2] = origEssenceWarp.vanillaData[2]
+			rom.data[duplicateExitOffset+3] = origEssenceWarp.vanillaData[3]
 
 			// Also set a bit in the entrance warp's "group" variable which will
 			// trigger the special-case
@@ -502,7 +503,7 @@ func (rom *romState) setWarps(warpMap map[string]string, dungeons bool) {
 			// warp data here, rely on the special-case code to handle exiting
 			// the dungeon instead
 			if numExits == 1 {
-				rom.data[exitWarp.romOffset+i]  = (*exitWarpData)[i]
+				rom.data[exitWarp.romOffset+i] = (*exitWarpData)[i]
 			}
 		}
 
@@ -677,6 +678,20 @@ func loadShopNames(game string) map[string]string {
 	}
 
 	return m
+}
+
+// writes starting items to the rom
+func (rom *romState) writeStartingItems(ropts *randomizerOptions) {
+	addr := rom.lookupLabel("randovar_startingItems").fullOffset()
+	for _, s := range strings.Split(ropts.starting, ",") {
+		item, ok := rom.treasures[s]
+		if !ok {
+			panic("no such item: " + s)
+		}
+		rom.data[addr] = item.id
+		rom.data[addr+1] = item.subid
+		addr += 2
+	}
 }
 
 // writes boolean configuration parameters to the rom
