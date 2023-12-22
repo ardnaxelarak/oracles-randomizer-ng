@@ -11,20 +11,21 @@ var commonNiceNames = map[string]string{
 	"gale tree seeds":    "gale seeds",
 
 	// items
-	"sword":   "wooden/noble sword",
-	"satchel": "seed satchel",
+	"sword":       "progressive sword",
+	"iron shield": "progressive shield",
+	"satchel":     "seed satchel",
 
 	// items from seasons (or upgrades from seasons)
-	"boomerang":     "(magic) boomerang",
+	"boomerang":     "progressive boomerang",
 	"magnet gloves": "magnetic gloves",
-	"slingshot":     "(hyper) slingshot",
-	"feather":       "roc's feather/cape",
+	"slingshot":     "progressive slingshot",
+	"feather":       "progressive feather",
 
 	// items from ages (or upgrades from ages)
 	"cane":        "cane of somaria",
-	"switch hook": "switch/long hook",
-	"bracelet":    "power bracelet/glove",
-	"flippers":    "zora's flippers / mermaid suit",
+	"switch hook": "progressive switch hook",
+	"bracelet":    "progressive bracelet",
+	"flippers":    "progressive flippers",
 }
 
 var seasonsNiceNames = map[string]string{
@@ -44,7 +45,7 @@ var seasonsNiceNames = map[string]string{
 
 var agesNiceNames = map[string]string{
 	// items
-	"harp":         "tune of echoes/currents/ages",
+	"harp":         "progressive harp",
 	"goron letter": "letter of introduction",
 	"rod":          "rod of seasons", // unlike seasons we only have one rod
 
