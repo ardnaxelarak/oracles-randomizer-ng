@@ -1,4 +1,4 @@
-package randomizer
+package main
 
 // map internal names to descriptive names for log file
 

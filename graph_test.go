@@ -1,4 +1,4 @@
-package randomizer
+package main
 
 import (
 	"reflect"

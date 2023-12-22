@@ -1,4 +1,4 @@
-package randomizer
+package main
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 func TestMutableOverlap(t *testing.T) {
 	for _, game := range []int{gameSeasons, gameAges} {
 		hitBytes := make(map[int]*string)
-		for k, v := range newRomState(nil, nil, game, 0, false).getAllMutables() {
+		for k, v := range newRomState(nil, nil, nil, game, 0, false, false).getAllMutables() {
 			k := k
 			switch v := v.(type) {
 			case *mutableRange:
