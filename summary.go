@@ -170,7 +170,7 @@ func writeSummary(path string, checksum []byte, ropts randomizerOptions,
 
 	// starting items
 	sendSectionHeader(summary, "starting items")
-	for _, s := range strings.Split(ropts.starting, ",") {
+	for _, s := range ropts.starting {
 		summary <- getNiceName(s, rom.game)
 	}
 

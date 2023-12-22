@@ -76,7 +76,7 @@ type routeInfo struct {
 	companion     int // 1 to 3
 	usedItems     *list.List
 	usedSlots     *list.List
-	startingItems *list.List
+	startingItems []string
 	ringMap       map[string]string
 	attemptCount  int
 	src           *rand.Rand
@@ -97,18 +97,6 @@ func newRouteGraph(rom *romState) graph {
 	return g
 }
 
-func getStartingItems(rom *romState, itemlist string) *list.List {
-	result := list.New()
-	for _, s := range strings.Split(itemlist, ",") {
-		_, ok := rom.treasures[s]
-		if !ok {
-			panic("no such item: " + s)
-		}
-		result.PushBack(s)
-	}
-	return result
-}
-
 // attempts to create a path to the given targets by placing different items in
 // slots.
 func findRoute(rom *romState, seed uint32, src *rand.Rand,
@@ -122,7 +110,7 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 		seed:          seed,
 		usedItems:     list.New(),
 		usedSlots:     list.New(),
-		startingItems: getStartingItems(rom, ropts.starting),
+		startingItems: ropts.starting,
 		src:           src,
 	}
 
@@ -143,8 +131,7 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 		itemList, slotList = initRouteInfo(ri, rom)
 
 		// attach starting items to the "start" node
-		for ei := ri.startingItems.Front(); ei != nil; ei = ei.Next() {
-			item := ei.Value.(string)
+		for _, item := range ri.startingItems {
 			ri.graph[item].addParent(ri.graph["start"])
 		}
 
@@ -417,8 +404,7 @@ func initRouteInfo(
 	sort.Strings(slotNames)
 
 	// replace starting items with gasha seeds
-	for ei := ri.startingItems.Front(); ei != nil; ei = ei.Next() {
-		item := ei.Value.(string)
+	for _, item := range ri.startingItems {
 		for i, key := range itemNames {
 			if key == item {
 				itemNames[i] = "gasha seed"

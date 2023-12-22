@@ -90,7 +90,7 @@ type randomizerOptions struct {
 	seed        string
 	game        int
 	players     int
-	starting    string
+	starting    []string
 }
 
 // initFlags initializes the CLI/TUI option values and variables.
@@ -169,6 +169,15 @@ func roptsFromString(s string, ropts *randomizerOptions) error {
 	return nil
 }
 
+// parses starting options string
+func parseStartingItems(itemlist string) []string {
+	if len(itemlist) == 0 {
+		return []string{}
+	} else {
+		return strings.Split(itemlist, ",")
+	}
+}
+
 // the program's entry point.
 func main() {
 	initFlags()
@@ -207,7 +216,7 @@ func main() {
 			keysanity:   flagKeysanity,
 			crossitems:  flagCrossitems,
 			linkeditems: flagLinkeditems,
-			starting:    flagStarting,
+			starting:    parseStartingItems(flagStarting),
 		})
 	}
 	for _, ropts := range optsList {

@@ -679,7 +679,7 @@ func loadShopNames(game string) map[string]string {
 // writes starting items to the rom
 func (rom *romState) writeStartingItems(ropts *randomizerOptions) {
 	addr := rom.lookupLabel("randovar_startingItems").fullOffset()
-	for _, s := range strings.Split(ropts.starting, ",") {
+	for _, s := range ropts.starting {
 		item, ok := rom.treasures[s]
 		if !ok {
 			panic("no such item: " + s)
