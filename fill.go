@@ -132,7 +132,9 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 
 		// attach starting items to the "start" node
 		for _, item := range ri.startingItems {
-			ri.graph[item].addParent(ri.graph["start"])
+			if ri.graph[item] != nil {
+				ri.graph[item].addParent(ri.graph["start"])
+			}
 		}
 
 		// attach free items to the "start" node until placed.

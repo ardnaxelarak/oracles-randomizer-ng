@@ -123,7 +123,7 @@ func initFlags() {
 	flag.StringVar(&flagSeed, "seed", "",
 		"specific random seed to use (32-bit hex number)")
 	flag.StringVar(&flagStarting, "starting", "",
-		"comma-separated list of starting items")
+		"semicolon-separated list of starting items")
 	flag.BoolVar(&flagAutoMermaid, "automermaid", false,
 		"hold direction to swim instead of tapping with mermaid suit")
 	flag.BoolVar(&flagVerbose, "verbose", false,
@@ -174,7 +174,7 @@ func parseStartingItems(itemlist string) []string {
 	if len(itemlist) == 0 {
 		return []string{}
 	} else {
-		return strings.Split(itemlist, ",")
+		return strings.Split(itemlist, ";")
 	}
 }
 

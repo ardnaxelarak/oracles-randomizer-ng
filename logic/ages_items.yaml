@@ -5,6 +5,8 @@ rod: {or: []}
 slingshot: {or: []}
 magnet gloves: {or: []}
 fool's ore: {or: []}
+biggoron's sword: {or: []}
+bombchus, 10: {or: []}
 
 shield: {or: [wooden shield, iron shield]}
 

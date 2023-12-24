@@ -159,65 +159,52 @@ func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlo
 		m[name] = slot
 	}
 
+	itemsToInsert := []string(nil)
+
 	if crossitems {
-		itemsToInsert := []string(nil)
 		if rom.game == gameSeasons {
-			itemsToInsert = []string{
+			itemsToInsert = append(itemsToInsert,
 				"switch hook",
 				"switch hook",
 				"cane",
 				"seed shooter",
 				"flippers",
 				"bracelet",
-			}
+			)
 		} else {
-			itemsToInsert = []string{
+			itemsToInsert = append(itemsToInsert,
 				"feather",
 				"rod",
 				"slingshot",
 				"slingshot",
-				"magnet gloves",
+				// "magnet gloves", // removed to avoid overfilling item select screen
 				"boomerang",
 				"fool's ore",
-			}
-		}
-
-		for _, item := range itemsToInsert {
-			inserted := false
-			for _, slot := range m {
-				if slot.treasure.displayName == "gasha seed" {
-					slot.treasure = rom.treasures[item]
-					inserted = true
-					break
-				}
-			}
-			if !inserted {
-				panic(fmt.Sprintf("couldn't insert item %s into item slots", item))
-			}
+			)
 		}
 	}
 
 	if linkeditems {
-		itemsToInsert := []string{
+		itemsToInsert = append(itemsToInsert,
 			"sword",
 			"biggoron's sword",
 			"satchel",
-			"bombchu, 10",
+			// "bombchu, 10", // removed to avoid overfilling item select screen
 			"iron shield",
-		}
+		)
+	}
 
-		for _, item := range itemsToInsert {
-			inserted := false
-			for _, slot := range m {
-				if slot.treasure.displayName == "gasha seed" {
-					slot.treasure = rom.treasures[item]
-					inserted = true
-					break
-				}
+	for _, item := range itemsToInsert {
+		inserted := false
+		for _, slot := range m {
+			if slot.treasure.displayName == "gasha seed" {
+				slot.treasure = rom.treasures[item]
+				inserted = true
+				break
 			}
-			if !inserted {
-				panic(fmt.Sprintf("couldn't insert item %s into item slots", item))
-			}
+		}
+		if !inserted {
+			panic(fmt.Sprintf("couldn't insert item %s into item slots", item))
 		}
 	}
 

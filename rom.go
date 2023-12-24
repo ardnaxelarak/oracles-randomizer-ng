@@ -16,6 +16,7 @@ var rings []string
 
 // only applies to seasons! used for warps
 var dungeonEntranceNameRegexp = regexp.MustCompile(`^d[1-8] entrance$`)
+var ringRegexp = regexp.MustCompile(` ring(?: L-[1-3])?$`)
 
 // a fully-specified memory address. "offset" isn't true offset from the start
 // of the bank (except for bank 0); it's bus address.
@@ -681,12 +682,21 @@ func loadShopNames(game string) map[string]string {
 func (rom *romState) writeStartingItems(ropts *randomizerOptions) {
 	addr := rom.lookupLabel("randovar_startingItems").fullOffset()
 	for _, s := range ropts.starting {
-		item, ok := rom.treasures[s]
-		if !ok {
-			panic("no such item: " + s)
+		if ringRegexp.MatchString(s) {
+			if id := getStringIndex(rings, s); id != -1 {
+				rom.data[addr] = 0x2d
+				rom.data[addr+1] = byte(id)
+			} else {
+				panic("no such ring: " + s)
+			}
+		} else {
+			item, ok := rom.treasures[s]
+			if !ok {
+				panic("no such item: " + s)
+			}
+			rom.data[addr] = item.id
+			rom.data[addr+1] = item.subid
 		}
-		rom.data[addr] = item.id
-		rom.data[addr+1] = item.subid
 		addr += 2
 	}
 }
