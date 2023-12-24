@@ -20,7 +20,8 @@ moosh's flute: {or: []}
 flute: {or: [ricky's flute, dimitri's flute, moosh's flute]}
 
 farm rupees: {or: [ # only in logic for minigames. so almost never matters
-    sword, fool's ore, shovel, bracelet, boomerang, cane, switch hook, flute]}
+    sword, fool's ore, shovel, bracelet, boomerang, cane, switch hook, flute,
+    biggoron's sword]}
 fixed rupees: {rupees: [
     "rupees, 10", "rupees, 20", "rupees, 30", "rupees, 50", "rupees, 100",
     "rupees, 200", rolling ridge past old man]}
@@ -90,4 +91,4 @@ mystery hyper slingshot: [mystery seeds, hyper slingshot]
 any hyper slingshot: [hyper slingshot, or: [ember seeds,
     mystery seeds, scent seeds, pegasus seeds, gale seeds]]
 
-harvest tree: {or: [sword, rod, fool's ore, punch object]}
+harvest tree: {or: [sword, rod, fool's ore, punch object, biggoron's sword]}

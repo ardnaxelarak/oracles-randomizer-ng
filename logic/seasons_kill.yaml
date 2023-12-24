@@ -16,39 +16,42 @@ slingshot kill normal: [or: [slingshot, seed shooter], or: [ember seeds, scent s
 
 # enemies vulnerable to scent seeds are always vulnerable to sword and fool's
 # ore (and punches?).
-kill armored: {or: [sword, fool's ore, punch enemy,
+kill armored: {or: [sword, fool's ore, punch enemy, biggoron's sword,
     [scent seeds, or: [seed ranged, [hard, satchel]]]]}
 
 # the safe version is for areas where you can't possibly get stuck from being
 # on the wrong side of a bush.
 break bush safe: {or: [ # TODO: Remove this
-    sword, switch hook, magic boomerang, bracelet, ember seeds, gale ranged, bombs]}
+    sword, switch hook, magic boomerang, bracelet, ember seeds, gale ranged,
+    bombs, biggoron's sword]}
 break bush: {or: [
-    sword, switch hook, magic boomerang, bracelet, [gale satchel, break bush safe]]}
+    sword, switch hook, magic boomerang, bracelet, biggoron's sword,
+    [gale satchel, break bush safe]]}
 
-kill normal no cane: {or: [
-    sword, satchel kill normal, slingshot kill normal, fool's ore, punch enemy]}
+kill normal no cane: {or: [sword, satchel kill normal, slingshot kill normal,
+    fool's ore, punch enemy, biggoron's sword]}
 kill normal: {or: [kill normal no cane, cane]}
-pit kill normal: {or: [sword, shield, rod, fool's ore, kill armored]}
+pit kill normal: {or: [sword, shield, rod, fool's ore, kill armored,
+    biggoron's sword]}
 kill switch hook: [or: [kill normal, switch hook]]
 kill stalfos: {or: [kill normal, rod]}
 hit lever from minecart: {or: [sword, boomerang, rod, scent seeds,
-    mystery seeds, seed ranged, fool's ore, punch object]}
+    mystery seeds, seed ranged, fool's ore, punch object, biggoron's sword]}
 hit lever: {or: [shovel, switch hook, hit lever from minecart]}
 kill normal (pit): {or: [kill normal, pit kill normal]}
 hit far switch: {or: [boomerang, bombs, seed ranged, switch hook, [sword, energy ring]]}
 kill hardhat (pit): {or: [sword, boomerang, shield, rod, fool's ore, switch hook,
-    [hard, or: [shovel, cane]],
+    biggoron's sword, [hard, or: [shovel, cane]],
     [or: [seed ranged, [hard, satchel]], or: [scent seeds, gale seeds]]]}
 kill moblin (gap): {or: [sword, scent seeds, slingshot kill normal, fool's ore,
-    [or: [feather, switch hook], kill normal (pit)],
+    biggoron's sword, [or: [feather, switch hook], kill normal (pit)],
     [hard, or: [punch enemy, ember seeds, cane]]]}
-break pot: {or: [noble sword, bracelet, switch hook]}
+break pot: {or: [noble sword, bracelet, switch hook, biggoron's sword]}
 flip spiked beetle: {or: [shield, shovel]}
 # spiked beetles can't be punched for some reason
 flip kill spiked beetle: [flip spiked beetle,
     or: [sword, fool's ore, satchel kill normal, slingshot kill normal,
-        switch hook, cane]]
+        switch hook, cane, biggoron's sword]]
 kill spiked beetle: {
     or: [flip kill spiked beetle, gale ranged, [hard, gale seeds]]}
 kill moldorm: [or: [kill armored, switch hook, cane]]
@@ -59,27 +62,29 @@ kill darknut (pit): [or: [kill darknut, shield]]
 kill goriya bros: [or: [kill armored, switch hook, cane]]
 kill omuai: [or: [kill armored, switch hook], bracelet]
 break flower safe: {or: [ # TODO: Remove this
-    sword, magic boomerang, bombs, ember seeds, gale ranged]}
-break flower: {or: [sword, magic boomerang, [gale satchel, break flower safe]]}
+    sword, magic boomerang, bombs, ember seeds, gale ranged, biggoron's sword]}
+break flower: {or: [sword, magic boomerang, [gale satchel, break flower safe],
+    biggoron's sword]}
 kill agunima: [ember seeds, or: [kill armored, switch hook]]
 hit very far lever: {or: [magic boomerang, seed ranged]}
 kill gohma: [or: [seed ranged, hard], or: [scent seeds, ember seeds]]
 kill syger: [or: [kill armored, switch hook]]
 break mushroom: {or: [magic boomerang, bracelet]}
-break crystal: {or: [sword, bombs, bracelet, expert's ring]}
+break crystal: {or: [sword, bombs, bracelet, expert's ring, biggoron's sword]}
 kill hardhat (magnet): {or: [magnet gloves,
     [or: [seed ranged, hard], gale seeds]]}
-kill vire: {or: [sword, fool's ore, expert's ring]}
-finish manhandla: {or: [sword, seed ranged, fool's ore, expert's ring, switch hook]}
+kill vire: {or: [sword, fool's ore, expert's ring, biggoron's sword]}
+finish manhandla: {or: [sword, seed ranged, fool's ore, expert's ring,
+    switch hook, biggoron's sword]}
 kill manhandla: [magic boomerang, finish manhandla]
 kill poe sister: {or: [kill armored, rod, ember seeds, switch hook]}
-kill magunesu: {or: [sword, fool's ore, expert's ring]}
+kill magunesu: {or: [sword, fool's ore, expert's ring, biggoron's sword]}
 kill darknut (across pit): {or: [scent ranged, magnet gloves,
     [or: [cape, switch hook], kill darknut (pit)],
     [sword, energy ring]]}
-kill gleeok: {or: [sword, fool's ore, punch enemy]}
+kill gleeok: {or: [sword, fool's ore, punch enemy, biggoron's sword]}
 kill frypolar: {or: [[bracelet,
     or: [mystery ranged, [hard, mystery satchel]]],
     or: [ember ranged, [hard, ember satchel]]]}
-kill medusa head: {or: [sword, fool's ore]}
+kill medusa head: {or: [sword, fool's ore, biggoron's sword]}
 kill onox: [sword, feather]

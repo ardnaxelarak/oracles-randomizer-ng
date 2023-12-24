@@ -99,5 +99,5 @@ bomb jump 4: {or: [jump 6, [hard, cape, bombs]]}
 jump 6: [cape, pegasus satchel]
 # bomb jump 6: [hard, cape, pegasus satchel, bombs] # unused
 
-harvest tree: {or: [sword, rod, fool's ore, punch object]}
-harvest bush: {or: [sword, bombs, fool's ore]}
+harvest tree: {or: [biggoron's sword, sword, rod, fool's ore, punch object]}
+harvest bush: {or: [biggoron's sword, sword, bombs, fool's ore]}
