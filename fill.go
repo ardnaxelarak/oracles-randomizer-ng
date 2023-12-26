@@ -544,6 +544,13 @@ func itemFitsInSlot(itemNode, slotNode *node, ropts *randomizerOptions) bool {
 		return false
 	}
 
+	// only randomize Maple's heart piece if setting set
+	if !ropts.maple {
+		if slotNode.name == "maple item" && itemNode.name != "piece of heart" {
+			return false
+		}
+	}
+
 	// bomb flower has special graphics something. this could probably be
 	// worked around like with the temple of seasons, but i'm not super
 	// interested in doing that.

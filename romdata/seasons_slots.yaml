@@ -6,6 +6,11 @@
 # multiworld is re-implemented (aside from seed trees). "morerooms" is probably
 # also useless now.
 
+# common items
+maple item:
+  treasure: piece of heart
+  label: commonSlot_mapleItem
+
 # holodrum
 eyeglass lake, across bridge:
   treasure: gasha seed

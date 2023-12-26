@@ -169,9 +169,11 @@ func writeSummary(path string, checksum []byte, ropts randomizerOptions,
 		ternary(ropts.hard, "hard", "normal"))
 
 	// starting items
-	sendSectionHeader(summary, "starting items")
-	for _, s := range ropts.starting {
-		summary <- getNiceName(s, rom.game)
+	if len(ropts.starting) > 0 {
+		sendSectionHeader(summary, "starting items")
+		for _, s := range ropts.starting {
+			summary <- getNiceName(s, rom.game)
+		}
 	}
 
 	// items

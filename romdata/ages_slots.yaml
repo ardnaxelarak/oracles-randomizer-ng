@@ -1,5 +1,10 @@
 # see seasons_slots.yaml for more info.
 
+# common items
+maple item:
+  treasure: piece of heart
+  label: commonSlot_mapleItem
+
 # overworld present
 starting item:
   treasure: sword

@@ -245,6 +245,9 @@ func (rom *romState) setTreasureMapData() {
 		rom.data[addr+0] = 0x00
 		rom.data[addr+1] = 0x63 // default to tarm gate
 		for _, slot := range rom.lookupAllItemSlots(name + " jewel") {
+			if slot.mapTile == 0 {
+				continue;
+			}
 			if int(slot.player) == 0 || int(slot.player) == rom.player {
 				rom.data[addr+0] = byte(slot.mapTile >> 8)
 				rom.data[addr+1] = byte(slot.mapTile & 0xff)
@@ -717,4 +720,8 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 
 	addr := rom.lookupLabel("randoConfig").fullOffset()
 	rom.data[addr] = config
+
+	if ropts.maple {
+		rom.data[rom.lookupLabel("randovar_forceMapleDrop").fullOffset()] = 1
+	}
 }

@@ -4,6 +4,12 @@
 start: [] # parent for nodes reachable by default
 hard: {or: []}
 
+maple item: [farm enemies, pegasus satchel, or: [sword, biggoron's sword]]
+
+farm enemies: [kill normal, or: [deku forest, fairies' woods, enter d1,
+    [enter d2, kill spiked beetle], enter d3, enter d4, enter d5,
+    enter d6 present, enter d6 past]]
+
 # forest of time
 starting item: [start]
 nayru's house: [start]

@@ -117,10 +117,6 @@ func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlo
 
 	m := make(map[string]*itemSlot)
 	for name, raw := range raws {
-		if raw.Room == 0 && !raw.Dummy {
-			panic(name + " room is zero")
-		}
-
 		slot := &itemSlot{
 			treasure:  rom.treasures[raw.Treasure],
 			group:     byte(raw.Room >> 8),
