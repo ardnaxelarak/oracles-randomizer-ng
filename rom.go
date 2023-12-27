@@ -609,17 +609,19 @@ func stringToTiles(s string) []byte {
 			case c >= '0' && c <= '9':
 				return c - 0x20
 			case c >= 'A' && c <= 'Z':
-				return c + 0xa1
+				return c + 0x01
+			case c >= 'a' && c <= 'z':
+				return c + 0x01
 			case c == ' ':
-				return '\xfc'
+				return '\x5c'
 			case c == '+':
-				return '\xfd'
+				return '\x5d'
 			case c == '-':
-				return '\xfe'
+				return '\x5e'
 			case c == '.':
-				return '\xff'
+				return '\x5f'
 			default:
-				return '\xfc' // leave other characters blank
+				return '\x5c' // leave other characters blank
 			}
 		}()
 	}
