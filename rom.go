@@ -123,6 +123,8 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 
 	rom.setConfigData(ropts)
 
+	rom.setOreDamage(ropts.oredamage)
+
 	sum := makeRomChecksum(rom.data)
 	rom.data[0x14e] = sum[0]
 	rom.data[0x14f] = sum[1]
@@ -726,4 +728,12 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 	if ropts.maple {
 		rom.data[rom.lookupLabel("randovar_forceMapleDrop").fullOffset()] = 1
 	}
+}
+
+// writes fool's ore damage value
+func (rom *romState) setOreDamage(damage int) {
+	value := byte(-damage)
+
+	addr := rom.lookupLabel("itemAttributes").fullOffset() + 0x1e * 4 + 2
+	rom.data[addr] = value
 }

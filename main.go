@@ -76,6 +76,7 @@ var (
 	flagAutoMermaid bool
 	flagVerbose     bool
 	flagStarting    string
+	flagOreDamage   int
 )
 
 type randomizerOptions struct {
@@ -87,6 +88,7 @@ type randomizerOptions struct {
 	crossitems  bool
 	linkeditems bool
 	maple       bool
+	oredamage   int
 	plan        *plan
 	race        bool
 	seed        string
@@ -132,6 +134,8 @@ func initFlags() {
 		"hold direction to swim instead of tapping with mermaid suit")
 	flag.BoolVar(&flagVerbose, "verbose", false,
 		"print more detailed output to terminal")
+	flag.IntVar(&flagOreDamage, "oredamage", 12,
+		"set damage value of fool's ore")
 	flag.Parse()
 }
 
@@ -221,6 +225,7 @@ func main() {
 			crossitems:  flagCrossitems,
 			linkeditems: flagLinkeditems,
 			maple:       flagMaple,
+			oredamage:   flagOreDamage,
 			starting:    parseStartingItems(flagStarting),
 		})
 	}
