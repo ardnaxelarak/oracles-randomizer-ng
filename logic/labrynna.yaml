@@ -32,8 +32,8 @@ balloon guy: [feather, or: [sword, boomerang, rod, fool's ore],
         # Enter from cave
         [shore present, or: [any seed shooter, magic boomerang,
             [cape, or: [hard, pegasus satchel]],
-            [hard, or: [pegasus satchel, bombs], boomerang]],
-            [hard, pegasus satchel, bombs, any hyper slingshot]]]]
+            [hard, or: [pegasus satchel, bombs], boomerang],
+            [hard, pegasus satchel, bombs, any hyper slingshot]]]]]
 balloon guy's gift: [balloon guy]
 seed type: {
     or: [ember seeds, scent seeds, pegasus seeds, gale seeds, mystery seeds]}
