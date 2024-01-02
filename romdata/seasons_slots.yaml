@@ -260,7 +260,7 @@ subrosian dance hall:
   local: true
   label: seasonsSlot_subrosianDanceHall
 temple of seasons:
-  treasure: fool's ore # lone rod doesn't exist in rando
+  treasure: gasha seed # lone rod doesn't exist in rando
   room: 0x03ac
   maptile: 0x109
   local: true

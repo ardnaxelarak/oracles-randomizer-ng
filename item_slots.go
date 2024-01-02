@@ -107,7 +107,7 @@ var agesDungeonMapTiles = map[string]uint16{
 
 // return a map of slot names to slot data. if romState.data is nil, only
 // "static" data is loaded.
-func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlot {
+func (rom *romState) loadSlots(ropts *randomizerOptions) map[string]*itemSlot {
 	raws := make(map[string]*rawSlot)
 
 	filename := fmt.Sprintf("romdata/%s_slots.yaml", gameNames[rom.game])
@@ -157,7 +157,11 @@ func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlo
 
 	itemsToInsert := []string(nil)
 
-	if crossitems {
+	if ropts.oredamage > 0 {
+		itemsToInsert = append(itemsToInsert, "fool's ore")
+	}
+
+	if ropts.crossitems {
 		if rom.game == gameSeasons {
 			itemsToInsert = append(itemsToInsert,
 				"switch hook",
@@ -180,14 +184,17 @@ func (rom *romState) loadSlots(crossitems, linkeditems bool) map[string]*itemSlo
 		}
 	}
 
-	if linkeditems {
+	if ropts.linkeditems {
 		itemsToInsert = append(itemsToInsert,
 			"sword",
 			"biggoron's sword",
 			"satchel",
-			// "bombchu, 10", // removed to avoid overfilling item select screen
 			"iron shield",
 		)
+
+		if !ropts.crossitems || ropts.oredamage == 0 {
+			itemsToInsert = append(itemsToInsert, "bombchu, 10")
+		}
 	}
 
 	for _, item := range itemsToInsert {

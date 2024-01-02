@@ -134,8 +134,8 @@ func initFlags() {
 		"hold direction to swim instead of tapping with mermaid suit")
 	flag.BoolVar(&flagVerbose, "verbose", false,
 		"print more detailed output to terminal")
-	flag.IntVar(&flagOreDamage, "oredamage", 12,
-		"set damage value of fool's ore")
+	flag.IntVar(&flagOreDamage, "oredamage", 0,
+		"set damage value of fool's ore (or 0 to remove from pool)")
 	flag.Parse()
 }
 
@@ -258,7 +258,7 @@ func main() {
 		// i forget why or whether this is useful.
 		var rom *romState
 		if flag.Arg(1) == "" {
-			rom = newRomState(nil, nil, nil, game, 1, false, false)
+			rom = newRomState(nil, nil, nil, game, 1, &randomizerOptions{})
 		} else {
 			f, err := os.Open(flag.Arg(1))
 			if err != nil {
@@ -271,7 +271,7 @@ func main() {
 				fatal(err, printErrf)
 				return
 			}
-			rom = newRomState(b, nil, nil, game, 1, false, false)
+			rom = newRomState(b, nil, nil, game, 1, &randomizerOptions{})
 		}
 
 		fmt.Println(rom.findAddr(byte(bank), uint16(addr)))
@@ -358,7 +358,7 @@ func runRandomizer(ui *uiInstance, optsList []*randomizerOptions, logf logFunc) 
 				fatal(err, logf)
 				return
 			} else {
-				roms[i] = newRomState(b, labels, defs, game, i+1, ropts.crossitems, ropts.linkeditems)
+				roms[i] = newRomState(b, labels, defs, game, i+1, ropts)
 			}
 
 			// sanity check beforehand

@@ -83,7 +83,7 @@ type romState struct {
 	definitions  map[string]uint32
 }
 
-func newRomState(data []byte, labels map[string]*address, definitions map[string]uint32, game, player int, crossitems, linkeditems bool) *romState {
+func newRomState(data []byte, labels map[string]*address, definitions map[string]uint32, game, player int, ropts *randomizerOptions) *romState {
 	rom := &romState{
 		game:        game,
 		player:      player,
@@ -92,7 +92,7 @@ func newRomState(data []byte, labels map[string]*address, definitions map[string
 		definitions: definitions,
 		treasures:   loadTreasures(data, labels["treasureObjectData"], game),
 	}
-	rom.itemSlots = rom.loadSlots(crossitems, linkeditems)
+	rom.itemSlots = rom.loadSlots(ropts)
 	rom.initializeMutables(game)
 	return rom
 }
@@ -123,7 +123,9 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 
 	rom.setConfigData(ropts)
 
-	rom.setOreDamage(ropts.oredamage)
+	if ropts.oredamage > 0 {
+		rom.setOreDamage(ropts.oredamage)
+	}
 
 	sum := makeRomChecksum(rom.data)
 	rom.data[0x14e] = sum[0]
