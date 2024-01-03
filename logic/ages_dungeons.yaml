@@ -380,3 +380,5 @@ d8 SW slate chest: [d8 maze chest, bracelet, count: [5, d8 small key]]
 black tower owl: [mystery seeds, maku seed]
 done: [maku seed, mystery seeds, switch hook,
     or: [sword, fool's ore, punch enemy], bombs] # bombs in case of spider form
+
+any boss: {or: [d1 boss, d2 boss, d3 boss, d4 boss, d5 boss, d6 boss, d7 boss, d8 boss]}

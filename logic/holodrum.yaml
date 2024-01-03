@@ -5,7 +5,10 @@
 start: [] # parent for nodes reachable by default
 hard: {or: []}
 
-maple item: [pegasus satchel, or: [sword, biggoron's sword]]
+farm enemies: [kill normal]
+
+maple item: [farm enemies, pegasus satchel, or: [sword, biggoron's sword]]
+gasha item: [farm enemies, harvest tree, any boss]
 
 # horon village
 horon village: {or: [start, # portal included in case something changes

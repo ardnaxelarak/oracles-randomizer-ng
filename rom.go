@@ -727,8 +727,8 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 	addr := rom.lookupLabel("randoConfig").fullOffset()
 	rom.data[addr] = config
 
-	if ropts.maple {
-		rom.data[rom.lookupLabel("randovar_forceMapleDrop").fullOffset()] = 1
+	if ropts.maplegasha {
+		rom.data[rom.lookupLabel("randovar_forceDrops").fullOffset()] = 0x03
 	}
 }
 

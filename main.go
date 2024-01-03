@@ -66,7 +66,7 @@ var (
 	flagKeysanity   bool
 	flagCrossitems  bool
 	flagLinkeditems bool
-	flagMaple       bool
+	flagMapleGasha  bool
 	flagNoUI        bool
 	flagPlan        string
 	flagMulti       string
@@ -87,7 +87,7 @@ type randomizerOptions struct {
 	keysanity   bool
 	crossitems  bool
 	linkeditems bool
-	maple       bool
+	maplegasha  bool
 	oredamage   int
 	plan        *plan
 	race        bool
@@ -114,8 +114,8 @@ func initFlags() {
 		"add Ages items to Seasons, and vice-versa")
 	flag.BoolVar(&flagLinkeditems, "linkeditems", false,
 		"add items obtainable from a linked game to the pool")
-	flag.BoolVar(&flagMaple, "maple", false,
-		"include Maple's heart piece drop in the pool")
+	flag.BoolVar(&flagMapleGasha, "maplegasha", false,
+		"include gasha nut's and Maple's heart piece drops in the pool")
 	flag.BoolVar(&flagNoUI, "noui", false,
 		"use command line without prompts if input file is given")
 	flag.StringVar(&flagPlan, "plan", "",
@@ -224,7 +224,7 @@ func main() {
 			keysanity:   flagKeysanity,
 			crossitems:  flagCrossitems,
 			linkeditems: flagLinkeditems,
-			maple:       flagMaple,
+			maplegasha:  flagMapleGasha,
 			oredamage:   flagOreDamage,
 			starting:    parseStartingItems(flagStarting),
 		})
@@ -600,9 +600,9 @@ func getAndLogOptions(game int, ui *uiInstance, ropts *randomizerOptions,
 	logf("linked items %s.", ternary(ropts.linkeditems, "on", "off"))
 
 	if ui != nil {
-		ropts.maple = ui.doPrompt("shuffle Maple item? (y/n)") == 'y'
+		ropts.maplegasha = ui.doPrompt("shuffle Maple and gasha nut items? (y/n)") == 'y'
 	}
-	logf("shuffle Maple item %s.", ternary(ropts.maple, "on", "off"))
+	logf("shuffle Maple and gasha nut items %s.", ternary(ropts.maplegasha, "on", "off"))
 }
 
 // attempt to write rom data to a file and print summary info.

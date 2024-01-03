@@ -10,6 +10,9 @@
 maple item:
   treasure: piece of heart
   label: commonSlot_mapleItem
+gasha item:
+  treasure: piece of heart
+  label: commonSlot_gashaItem
 
 # holodrum
 eyeglass lake, across bridge:

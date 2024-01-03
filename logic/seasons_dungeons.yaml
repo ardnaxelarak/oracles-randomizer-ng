@@ -300,3 +300,5 @@ d8 boss: [d8 SW crystal, d8 NW crystal,
 # onox's castle
 enter d9: [d9 entrance] # not randomized
 done: [enter d9, kill armored, bombs, kill onox]
+
+any boss: {or: [d1 boss, d2 boss, d3 boss, d4 boss, d5 boss, d6 boss, d7 boss, d8 boss]}
