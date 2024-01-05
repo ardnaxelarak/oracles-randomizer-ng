@@ -545,10 +545,12 @@ func itemFitsInSlot(itemNode, slotNode *node, ropts *randomizerOptions) bool {
 	}
 
 	// only randomize Maple and gasha nut heart pieces if setting set
-	if !ropts.maplegasha {
+	if !ropts.maple {
 		if slotNode.name == "maple item" && itemNode.name != "piece of heart" {
 			return false
 		}
+	}
+	if !ropts.gasha {
 		if slotNode.name == "gasha item" && itemNode.name != "piece of heart" {
 			return false
 		}

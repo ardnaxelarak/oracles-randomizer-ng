@@ -727,9 +727,15 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 	addr := rom.lookupLabel("randoConfig").fullOffset()
 	rom.data[addr] = config
 
-	if ropts.maplegasha {
-		rom.data[rom.lookupLabel("randovar_forceDrops").fullOffset()] = 0x03
+	config = 0
+	if ropts.maple {
+		config |= 1
 	}
+	if ropts.gasha {
+		config |= 2
+	}
+
+	rom.data[rom.lookupLabel("randovar_forceDrops").fullOffset()] = config
 }
 
 // writes fool's ore damage value

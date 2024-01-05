@@ -179,7 +179,6 @@ func (rom *romState) loadSlots(ropts *randomizerOptions) map[string]*itemSlot {
 				"slingshot",
 				// "magnet gloves", // removed to avoid overfilling item select screen
 				"boomerang",
-				"fool's ore",
 			)
 		}
 	}

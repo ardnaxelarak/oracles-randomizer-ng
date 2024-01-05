@@ -92,8 +92,9 @@ d3 six-block drop: [d3 W crystal,
         [hard, or: [switch hook, boomerang]]]] # hit orb
 d3 conveyor belt room: [d3 six-block drop,
     or: [bombs, cane, scent ranged, magic boomerang, [hard, scent satchel]]]
-break crystal switch: {or: [sword, switch hook, boomerang, ember satchel,
-    scent satchel, mystery satchel, seed ranged, punch object, fool's ore]}
+break crystal switch: {or: [sword, biggoron's sword, switch hook, boomerang,
+    ember satchel, scent satchel, mystery satchel, seed ranged, punch object,
+    fool's ore]}
 d3 B1F spinner: [d3 S crystal, d3 E crystal, d3 N crystal, d3 W crystal,
     break crystal switch]
 d3 crossroads: [d3 B1F spinner]
