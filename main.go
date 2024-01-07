@@ -78,6 +78,7 @@ var (
 	flagVerbose     bool
 	flagStarting    string
 	flagOreDamage   int
+	flagEssences    int
 )
 
 type randomizerOptions struct {
@@ -97,6 +98,7 @@ type randomizerOptions struct {
 	game        int
 	players     int
 	starting    []string
+	essences    int
 }
 
 // initFlags initializes the CLI/TUI option values and variables.
@@ -140,6 +142,8 @@ func initFlags() {
 		"print more detailed output to terminal")
 	flag.IntVar(&flagOreDamage, "oredamage", 0,
 		"set damage value of fool's ore (or 0 to remove from pool)")
+	flag.IntVar(&flagEssences, "essences", 8,
+		"number of essences to get the maku seed")
 	flag.Parse()
 }
 
@@ -231,6 +235,7 @@ func main() {
 			maple:       flagMaple,
 			gasha:       flagGasha,
 			oredamage:   flagOreDamage,
+			essences:    flagEssences,
 			starting:    parseStartingItems(flagStarting),
 		})
 	}
@@ -571,6 +576,14 @@ func getAndLogOptions(game int, ui *uiInstance, ropts *randomizerOptions,
 		ropts.hard = ui.doPrompt("enable hard difficulty? (y/n)") == 'y'
 	}
 	logf("using %s difficulty.", ternary(ropts.hard, "hard", "normal"))
+
+	if ui != nil {
+		ropts.essences = int(ui.doPrompt("essences for maku seed? (1-8)") - '0')
+		if ropts.essences < 1 || ropts.essences > 8 {
+			ropts.essences = 8
+		}
+	}
+	logf("%d essences for maku seed.", ropts.essences)
 
 	if ui != nil {
 		ropts.autoMermaid = ui.doPrompt("enable auto mermaid suit? (y/n)") == 'y'

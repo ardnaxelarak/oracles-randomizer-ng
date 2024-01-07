@@ -736,6 +736,7 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 	}
 
 	rom.data[rom.lookupLabel("randovar_forceDrops").fullOffset()] = config
+	rom.data[rom.lookupLabel("randovar_goal").fullOffset()] = byte(ropts.essences)
 }
 
 // writes fool's ore damage value
