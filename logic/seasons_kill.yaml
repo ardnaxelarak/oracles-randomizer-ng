@@ -87,4 +87,4 @@ kill frypolar: {or: [[bracelet,
     or: [mystery ranged, [hard, mystery satchel]]],
     or: [ember ranged, [hard, ember satchel]]]}
 kill medusa head: {or: [sword, fool's ore, biggoron's sword]}
-kill onox: [sword, feather]
+kill onox: [sword, feather, rod]
