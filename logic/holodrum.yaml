@@ -8,7 +8,7 @@ hard: {or: []}
 farm enemies: [kill normal]
 
 maple item: [farm enemies, pegasus satchel, or: [sword, biggoron's sword]]
-gasha item: [farm enemies, harvest tree, any boss]
+gasha item: [farm enemies, or: [sword, fool's ore], any boss]
 
 # horon village
 horon village: {or: [start, # portal included in case something changes

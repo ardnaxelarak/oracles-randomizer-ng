@@ -5,7 +5,7 @@ start: [] # parent for nodes reachable by default
 hard: {or: []}
 
 maple item: [farm enemies, pegasus satchel, or: [sword, biggoron's sword]]
-gasha item: [farm enemies, harvest tree, any boss]
+gasha item: [farm enemies, or: [sword, fool's ore], any boss]
 
 farm enemies: [kill normal, or: [deku forest, fairies' woods, enter d1,
     [enter d2, kill spiked beetle], enter d3, enter d4, enter d5,
