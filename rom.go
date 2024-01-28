@@ -72,15 +72,16 @@ func makeRomChecksum(data []byte) [2]byte {
 }
 
 type romState struct {
-	game         int
-	player       int
-	data         []byte // actual contents of the file
-	treasures    map[string]*treasure
-	itemSlots    map[string]*itemSlot
-	codeMutables map[string]*mutableRange
-	bankEnds     []uint16 // bus offset of free space in each bank
-	labels       map[string]*address
-	definitions  map[string]uint32
+	game              int
+	player            int
+	data              []byte // actual contents of the file
+	treasures         map[string]*treasure
+	itemSlots         map[string]*itemSlot
+	codeMutables      map[string]*mutableRange
+	bankEnds          []uint16 // bus offset of free space in each bank
+	labels            map[string]*address
+	definitions       map[string]uint32
+	startingEquipment *startingEquipment
 }
 
 func newRomState(data []byte, labels map[string]*address, definitions map[string]uint32, game, player int, ropts *randomizerOptions) *romState {
@@ -93,6 +94,7 @@ func newRomState(data []byte, labels map[string]*address, definitions map[string
 		treasures:   loadTreasures(data, labels["treasureObjectData"], game),
 	}
 	rom.itemSlots = rom.loadSlots(ropts)
+	rom.startingEquipment = parseStartingEquipment(rom, ropts)
 	rom.initializeMutables(game)
 	return rom
 }
@@ -110,8 +112,8 @@ func (rom *romState) mutate(warpMap map[string]string, seed uint32,
 		rom.setTreasureMapData()
 	}
 
-	rom.writeStartingItems(ropts)
 	rom.setSeedData()
+	rom.writeStartingItems()
 	rom.setFileSelectText(optString(seed, ropts, "+"))
 	rom.attachText()
 	//rom.codeMutables["multiPlayerNumber"].new[0] = byte(rom.player) // TODO: Multiworld
@@ -177,6 +179,7 @@ func (rom *romState) setSeedData() {
 	initialTreeName := sora(rom.game, "horon village tree", "south lynna tree").(string)
 	initialSeedType := rom.itemSlots[initialTreeName].treasure.id
 	rom.data[rom.lookupLabel("randovar_initialSeedType").fullOffset()] = initialSeedType
+	rom.startingEquipment.setStartingSeeds(rom, initialSeedType)
 
 	if rom.game == gameSeasons {
 		for i, treeData := range [][]string{
@@ -250,7 +253,7 @@ func (rom *romState) setTreasureMapData() {
 		rom.data[addr+1] = 0x63 // default to tarm gate
 		for _, slot := range rom.lookupAllItemSlots(name + " jewel") {
 			if slot.mapTile == 0 {
-				continue;
+				continue
 			}
 			if int(slot.player) == 0 || int(slot.player) == rom.player {
 				rom.data[addr+0] = byte(slot.mapTile >> 8)
@@ -687,26 +690,9 @@ func loadShopNames(game string) map[string]string {
 	return m
 }
 
-// writes starting items to the rom
-func (rom *romState) writeStartingItems(ropts *randomizerOptions) {
-	addr := rom.lookupLabel("randovar_startingItems").fullOffset()
-	for _, s := range ropts.starting {
-		if ringRegexp.MatchString(s) {
-			if id := getStringIndex(rings, s); id != -1 {
-				rom.data[addr] = 0x2d
-				rom.data[addr+1] = byte(id)
-			} else {
-				panic("no such ring: " + s)
-			}
-		} else {
-			item, ok := rom.treasures[s]
-			if !ok {
-				panic("no such item: " + s)
-			}
-			rom.data[addr] = item.id
-			rom.data[addr+1] = item.subid
-		}
-		addr += 2
+func (rom *romState) writeStartingItems() {
+	for k, v := range rom.startingEquipment.data {
+		rom.data[k] = v
 	}
 }
 
@@ -743,6 +729,6 @@ func (rom *romState) setConfigData(ropts *randomizerOptions) {
 func (rom *romState) setOreDamage(damage int) {
 	value := byte(-damage)
 
-	addr := rom.lookupLabel("itemAttributes").fullOffset() + 0x1e * 4 + 2
+	addr := rom.lookupLabel("itemAttributes").fullOffset() + 0x1e*4 + 2
 	rom.data[addr] = value
 }

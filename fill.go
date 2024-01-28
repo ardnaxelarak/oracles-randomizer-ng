@@ -131,7 +131,7 @@ func findRoute(rom *romState, seed uint32, src *rand.Rand,
 		itemList, slotList = initRouteInfo(ri, rom)
 
 		// attach starting items to the "start" node
-		for _, item := range ri.startingItems {
+		for _, item := range rom.startingEquipment.items {
 			if ri.graph[item] != nil {
 				ri.graph[item].addParent(ri.graph["start"])
 			}
@@ -406,7 +406,7 @@ func initRouteInfo(
 	sort.Strings(slotNames)
 
 	// replace starting items with gasha seeds
-	for _, item := range ri.startingItems {
+	for _, item := range rom.startingEquipment.items {
 		for i, key := range itemNames {
 			if key == item {
 				itemNames[i] = "gasha seed"

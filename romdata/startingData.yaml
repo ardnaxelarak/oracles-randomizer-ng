@@ -1,0 +1,299 @@
+common:
+  shield:
+    itemId: 0x01
+    treasure: 0x01
+    setCount: rando_startingShieldLevel
+    countAs_1: wooden shield
+    countAs_2: iron shield
+    countAs_3: iron shield
+  sword:
+    itemId: 0x05
+    treasure: 0x05
+    setCount: rando_startingSwordLevel
+  bombs:
+    itemId: 0x03
+    treasure: 0x03
+    set_0x10: rando_startingNumBombs
+    remove: bombs, 10
+  boomerang:
+    itemId: 0x06
+    treasure: 0x06
+    setCount: rando_startingBoomerangLevel
+  biggoron's sword:
+    itemId: 0x0c
+    treasure: 0x0c
+  bombchus:
+    itemId: 0x0d
+    treasure: 0x0d
+    set_0x10: rando_startingNumBombchus
+    remove: bombchu, 10
+  flute:
+    itemId: 0x0e
+    treasure: 0x0e
+  shovel:
+    itemId: 0x15
+    treasure: 0x15
+  bracelet:
+    itemId: 0x16
+    treasure: 0x16
+    setCount: rando_startingBraceletLevel
+  feather:
+    itemId: 0x17
+    treasure: 0x17
+    setCount: rando_startingFeatherLevel
+  satchel:
+    itemId: 0x19
+    treasure: 0x19
+    setCount: rando_startingSeedSatchelLevel
+    startingSeeds: true
+  cane:
+    itemId: 0x04
+    treasure: 0x04
+  switch hook:
+    itemId: 0x0a
+    treasure: 0x0a
+    setCount: rando_startingSwitchHookLevel
+  seed shooter:
+    itemId: 0x0f
+    treasure: 0x0f
+    startingSeeds: true
+  magnet gloves:
+    itemId: 0x08
+    treasure: 0x08
+  slingshot:
+    itemId: 0x13
+    treasure: 0x13
+    setCount: rando_startingSlingshotLevel
+    startingSeeds: true
+  fool's ore:
+    itemId: 0x1e
+    treasure: 0x1e
+  rod:
+    itemId: 0x07
+    treasure: 0x07
+  harp:
+    itemId: 0x11
+    treasure: 0x11
+    countTreasure_1: 0x25
+    countTreasure_2: 0x26
+    countTreasure_3: 0x27
+  ember seeds:
+    treasure: 0x20
+    fillSatchel: rando_startingNumEmberSeeds
+  scent seeds:
+    treasure: 0x21
+    fillSatchel: rando_startingNumScentSeeds
+  pegasus seeds:
+    treasure: 0x22
+    fillSatchel: rando_startingNumPegasusSeeds
+  gale seeds:
+    treasure: 0x23
+    fillSatchel: rando_startingNumGaleSeeds
+  mystery seeds:
+    treasure: 0x24
+    fillSatchel: rando_startingNumMysterySeeds
+
+  # rupees - handle in code
+  # hearts - handle in code
+
+  # dungeon items
+  d1 small key:
+    setCount: rando_startingDungeonSmallKeys+1
+  d2 small key:
+    setCount: rando_startingDungeonSmallKeys+2
+  d3 small key:
+    setCount: rando_startingDungeonSmallKeys+3
+  d4 small key:
+    setCount: rando_startingDungeonSmallKeys+4
+  d5 small key:
+    setCount: rando_startingDungeonSmallKeys+5
+  d7 small key:
+    setCount: rando_startingDungeonSmallKeys+7
+  d8 small key:
+    setCount: rando_startingDungeonSmallKeys+8
+  d1 boss key:
+    setBit_1: rando_startingDungeonBossKeys
+  d2 boss key:
+    setBit_2: rando_startingDungeonBossKeys
+  d3 boss key:
+    setBit_3: rando_startingDungeonBossKeys
+  d4 boss key:
+    setBit_4: rando_startingDungeonBossKeys
+  d5 boss key:
+    setBit_5: rando_startingDungeonBossKeys
+  d7 boss key:
+    setBit_7: rando_startingDungeonBossKeys
+  d8 boss key:
+    setBit_8: rando_startingDungeonBossKeys
+  d1 compass:
+    setBit_1: rando_startingDungeonCompasses
+  d2 compass:
+    setBit_2: rando_startingDungeonCompasses
+  d3 compass:
+    setBit_3: rando_startingDungeonCompasses
+  d4 compass:
+    setBit_4: rando_startingDungeonCompasses
+  d5 compass:
+    setBit_5: rando_startingDungeonCompasses
+  d7 compass:
+    setBit_7: rando_startingDungeonCompasses
+  d8 compass:
+    setBit_8: rando_startingDungeonCompasses
+  d1 dungeon map:
+    setBit_1: rando_startingDungeonMaps
+  d2 dungeon map:
+    setBit_2: rando_startingDungeonMaps
+  d3 dungeon map:
+    setBit_3: rando_startingDungeonMaps
+  d4 dungeon map:
+    setBit_4: rando_startingDungeonMaps
+  d5 dungeon map:
+    setBit_5: rando_startingDungeonMaps
+  d7 dungeon map:
+    setBit_7: rando_startingDungeonMaps
+  d8 dungeon map:
+    setBit_8: rando_startingDungeonMaps
+  gasha seed:
+    treasure: 0x34
+    setCount: rando_startingGashaSeeds
+  potion:
+    treasure: 0x2f
+
+seasons:
+  spring:
+    include: rod
+    setBit_0: rando_startingObtainedSeasons
+  summer:
+    include: rod
+    setBit_1: rando_startingObtainedSeasons
+  autumn:
+    include: rod
+    setBit_2: rando_startingObtainedSeasons
+  winter:
+    include: rod
+    setBit_3: rando_startingObtainedSeasons
+
+  # dungeon items
+  d0 small key:
+    setCount: rando_startingDungeonSmallKeys+0
+  d6 small key:
+    setCount: rando_startingDungeonSmallKeys+6
+  d6 boss key:
+    setBit_6: rando_startingDungeonBossKeys
+  d6 compass:
+    setBit_6: rando_startingDungeonCompasses
+  d6 dungeon map:
+    setBit_6: rando_startingDungeonMaps
+
+  # page 2
+  flippers:
+    treasure: 0x2e
+    countTreasure_2: 0x59
+  gnarled key:
+    treasure: 0x42
+  floodgate key:
+    treasure: 0x43
+  dragon key:
+    treasure: 0x44
+  star ore:
+    treasure: 0x45
+  ribbon:
+    treasure: 0x46
+  spring banana:
+    treasure: 0x47
+  ricky's gloves:
+    treasure: 0x48
+  bomb flower:
+    treasure: 0x49
+    countTreasure_1: 0x58
+  rusty bell:
+    treasure: 0x4a
+  treasure map:
+    treasure: 0x4b
+  round jewel:
+    treasure: 0x4c
+  pyramid jewel:
+    treasure: 0x4d
+  square jewel:
+    treasure: 0x4e
+  x-shaped jewel:
+    treasure: 0x4f
+  red ore:
+    treasure: 0x50
+  blue ore:
+    treasure: 0x51
+  hard ore:
+    treasure: 0x52
+  member's card:
+    treasure: 0x53
+  master's plaque:
+    treasure: 0x54
+ages:
+  # dungeon items
+  d0 small key:
+    setCount: rando_startingDungeonSmallKeys+0x0d
+  d6 present small key:
+    setCount: rando_startingDungeonSmallKeys+6
+  d6 present compass:
+    setBit_6: rando_startingDungeonCompasses
+  d6 present dungeon map:
+    setBit_6: rando_startingDungeonMaps
+  d6 past small key:
+    setCount: rando_startingDungeonSmallKeys+0x0c
+  d6 past compass:
+    setBit_0x0c: rando_startingDungeonCompasses
+  d6 past dungeon map:
+    setBit_0x0c: rando_startingDungeonMaps
+  d6 boss key:
+    setBit_0x0c: rando_startingDungeonBossKeys
+  slate:
+    treasure: 0x4b
+    setCount: rando_startingNumSlates
+
+  # page 2
+  flippers:
+    treasure: 0x2e
+    countTreasure_2: 0x4a
+  graveyard key:
+    treasure: 0x42
+  crown key:
+    treasure: 0x43
+  mermaid key:
+    treasure: 0x44
+  old mermaid key:
+    treasure: 0x45
+  library key:
+    treasure: 0x46
+  ricky's gloves:
+    treasure: 0x48
+  bomb flower:
+    treasure: 0x49
+    countTreasure_1: 0x58
+  tuni nut:
+    treasure: 0x4c
+  scent seedling:
+    treasure: 0x4d
+  zora scale:
+    treasure: 0x4e
+  tokay eyeball:
+    treasure: 0x4f
+  fairy powder:
+    treasure: 0x51
+  cheval rope:
+    treasure: 0x52
+  island chart:
+    treasure: 0x54
+  book of seals:
+    treasure: 0x55
+  goron letter:
+    treasure: 0x59
+  lava juice:
+    treasure: 0x5a
+  brother emblem:
+    treasure: 0x5b
+  goron vase:
+    treasure: 0x5c
+  goronade:
+    treasure: 0x5d
+  rock brisket:
+    treasure: 0x5e

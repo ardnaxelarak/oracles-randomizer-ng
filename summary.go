@@ -171,7 +171,7 @@ func writeSummary(path string, checksum []byte, ropts randomizerOptions,
 	// starting items
 	if len(ropts.starting) > 0 {
 		sendSectionHeader(summary, "starting items")
-		for _, s := range ropts.starting {
+		for _, s := range rom.startingEquipment.items {
 			summary <- getNiceName(s, rom.game)
 		}
 	}

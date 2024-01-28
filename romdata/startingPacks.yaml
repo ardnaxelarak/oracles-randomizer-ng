@@ -1,0 +1,86 @@
+ages:
+  small keys:
+    - d0 small key
+    - d1 small key, 3
+    - d2 small key, 5
+    - d3 small key, 4
+    - d4 small key, 5
+    - d5 small key, 5
+    - d6 present small key, 3
+    - d6 past small key, 3
+    - d7 small key, 7
+    - d8 small key, 5
+  boss keys:
+    - d1 boss key
+    - d2 boss key
+    - d3 boss key
+    - d4 boss key
+    - d5 boss key
+    - d6 boss key
+    - d7 boss key
+    - d8 boss key
+  compasses:
+    - d1 compass
+    - d2 compass
+    - d3 compass
+    - d4 compass
+    - d5 compass
+    - d6 present compass
+    - d6 past compass
+    - d7 compass
+    - d8 compass
+  dungeon maps:
+    - d1 dungeon map
+    - d2 dungeon map
+    - d3 dungeon map
+    - d4 dungeon map
+    - d5 dungeon map
+    - d6 present dungeon map
+    - d6 past dungeon map
+    - d7 dungeon map
+    - d8 dungeon map
+  slates:
+    - slate, 4
+seasons:
+  small keys:
+    - d0 small key
+    - d1 small key, 2
+    - d2 small key, 3
+    - d3 small key, 2
+    - d4 small key, 5
+    - d5 small key, 5
+    - d6 small key, 3
+    - d7 small key, 5
+    - d8 small key, 7
+  boss keys:
+    - d1 boss key
+    - d2 boss key
+    - d3 boss key
+    - d4 boss key
+    - d5 boss key
+    - d6 boss key
+    - d7 boss key
+    - d8 boss key
+  compasses:
+    - d1 compass
+    - d2 compass
+    - d3 compass
+    - d4 compass
+    - d5 compass
+    - d6 compass
+    - d7 compass
+    - d8 compass
+  dungeon maps:
+    - d1 dungeon map
+    - d2 dungeon map
+    - d3 dungeon map
+    - d4 dungeon map
+    - d5 dungeon map
+    - d6 dungeon map
+    - d7 dungeon map
+    - d8 dungeon map
+  jewels:
+    - round jewel
+    - pyramid jewel
+    - square jewel
+    - x-shaped jewel
