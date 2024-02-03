@@ -168,7 +168,7 @@ d4 second crystal switch: [d4 minecart B,
 # 4 keys
 d4 minecart C: [d4 minecart B, count: [4, d4 small key]]
 d4 color tile drop: [d4 minecart C,
-    or: [sword, fool's ore, rod, ranged seed weapon]]
+    or: [sword, fool's ore, biggoron's sword, rod, ranged seed weapon]]
 
 # 5 keys
 d4 minecart D: [d4 color tile drop, count: [5, d4 small key]]
@@ -183,7 +183,7 @@ d4 large floor puzzle: {or: [
     [d4 pre-miniboss, feather, switch hook],
     [hard, d4 minecart D, kill armos warrior, bomb jump 3, cane, noble sword]]}
 d4 boss: [d4 large floor puzzle, d4 boss key, switch hook,
-    or: [sword, fool's ore, boomerang, punch enemy]]
+    or: [sword, biggoron's sword, fool's ore, boomerang, punch enemy]]
 
 # 5 keys
 d4 lava pot chest: [d4 large floor puzzle, bracelet, switch hook,

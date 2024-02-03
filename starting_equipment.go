@@ -100,8 +100,8 @@ func parseStartingEquipment(rom *romState, ropts *randomizerOptions) *startingEq
 		}
 	}
 	if bigSword {
-		if invAddr == baseAddr + 1 {
-			invAddr += 1
+		if invAddr < baseAddr + 2 {
+			invAddr = baseAddr + 2
 		}
 		eq.data[invAddr] = 0x0c
 	}
